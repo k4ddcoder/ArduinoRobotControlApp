@@ -22,19 +22,14 @@ void handleRobot()
 
   if(server.args() == 2)
   {
-    if(server.arg("vel") == "" or server.arg("rot") == "")
-    {
-      server.send(400, "text/plain", "empty fields");
-    }else {
+    // motor update
+    int velL = server.arg("velL").toInt();
+    int velR = server.arg("velR").toInt();
 
-      // motor update
-      int vel = server.arg("vel");
-      int rot = server.arg("rot");
+    digitalWrite(RightMotorSpeed, velR);
+    digitalWrite(LeftMotorSpeed, velL);
 
-      server.send(200, "text/plain", "Done");
-      
-    }
-    
+    server.send(200, "text/plain", "Done");
     
   }else {
 
