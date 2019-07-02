@@ -3,7 +3,9 @@ package com.example.robotcontrol;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -60,12 +62,43 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        Button button = findViewById(R.id.stop);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
+                String url = "http://192.168.4.55/robotctrl?velL=0&velR=0";
+
+                StringRequest postRequest = new StringRequest(Request.Method.GET, url,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                // response
+                                Log.d("Response", response);
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                // error
+                                Log.d("Error.Response", error.toString());
+                            }
+                        }
+                );
+                queue.add(postRequest);
+
+            }
+        });
     }
 
 
     private int[] calculateServoSpeed(double angle, float strength) {
         int[] servoVelocities = new int[3];
         boolean up = checkUp(angle);
+
+
 
         //Right or Left direction
         if(checkRight(angle)) {
@@ -78,6 +111,8 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
+        servoVelocities[0] = (int) Math.round(servoVelocities[0] * 2.5);
+        servoVelocities[1] = (int) Math.round(servoVelocities[1] * 2.5);
         return servoVelocities;
     }
 

@@ -26,8 +26,8 @@ void handleRobot()
     int velL = server.arg("velL").toInt();
     int velR = server.arg("velR").toInt();
 
-    digitalWrite(RightMotorSpeed, velR);
-    digitalWrite(LeftMotorSpeed, velL);
+    analogWrite(RightMotorSpeed, velR);
+    analogWrite(LeftMotorSpeed, velL);
 
     server.send(200, "text/plain", "Done");
     
@@ -53,15 +53,17 @@ void handleRobot()
 void setup()
 { 
   
-  Serial.begin(9600);
+  Serial.begin(115200);
   Serial.println();
-    
+
   // initial settings of pins
   pinMode(RightMotorSpeed, OUTPUT);
   pinMode(LeftMotorSpeed, OUTPUT);
   pinMode(RightMotorDir, OUTPUT);
   pinMode(LeftMotorDir, OUTPUT);
 
+  analogWriteFreq(50000);
+  
   // initial settings for direction and speed
   digitalWrite(RightMotorSpeed, LOW);
   digitalWrite(LeftMotorSpeed, LOW);
