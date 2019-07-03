@@ -26,6 +26,17 @@ void handleRobot()
     int velL = server.arg("velL").toInt();
     int velR = server.arg("velR").toInt();
 
+    if(velR < 0) {
+      digitalWrite(RightMotorDir, LOW);
+      digitalWrite(LeftMotorDir, LOW);
+      velL = velL * -1;
+      velR = velR * -1;
+    }
+    else {
+      digitalWrite(RightMotorDir, HIGH);
+      digitalWrite(LeftMotorDir, HIGH);
+    }
+    
     analogWrite(RightMotorSpeed, velR);
     analogWrite(LeftMotorSpeed, velL);
 
