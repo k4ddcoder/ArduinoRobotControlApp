@@ -18,7 +18,6 @@ ESP8266WebServer server(80);
 
 void handleRobot()
 {
-  Serial.println("Robot ctrl");
 
   if(server.args() == 2)
   {
@@ -26,14 +25,19 @@ void handleRobot()
     int velL = server.arg("velL").toInt();
     int velR = server.arg("velR").toInt();
 
+    Serial.println("velL: " + server.arg("velL") + " velR: " + server.arg("velR"));
+
     if(velR < 0) {
       digitalWrite(RightMotorDir, LOW);
+      velR = velR * -1;
+    }else {
+      digitalWrite(RightMotorDir, HIGH);
+    }
+
+    if(velL < 0) {
       digitalWrite(LeftMotorDir, LOW);
       velL = velL * -1;
-      velR = velR * -1;
-    }
-    else {
-      digitalWrite(RightMotorDir, HIGH);
+    }else {
       digitalWrite(LeftMotorDir, HIGH);
     }
     
@@ -47,19 +51,6 @@ void handleRobot()
     server.send(400, "text/plain", "incorrect nArgs");
   }
   
-  String message = "Number of args received: ";
-  message += server.args();
-  message += "\n";
-
-  for(int i = 0; i < server.args(); i++)
-  {
-    message += "Arg nº" + (String)i + "->";
-    message += server.argName(i) + ": ";
-    message += server.arg(i) + "\n";
-  }
-
-  Serial.println(message);
-  server.send(200, "text/plain", message);
 }
 void setup()
 { 
